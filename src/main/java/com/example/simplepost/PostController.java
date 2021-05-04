@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +27,7 @@ public class PostController {
         return postRepository.save(post);
     }
 
-    //글 목록을 조회
+    //글 목록을 페이징하여 반환
     @GetMapping("/posts")
     public Page<Post> getPostList(@RequestParam(defaultValue = "1") Integer page) {
         return postRepository.findAll(
@@ -34,9 +35,11 @@ public class PostController {
         );
     }
 
-    //글 목록을 페이징하여 반환
-
     //글 번호로 조회
-
+    @GetMapping("/post/{id}")
+    public Post getPostById(@PathVariable("id") Long id) {
+        return postRepository.findById(id).get();
+    }
+    
     //글 내용으로 검색
 }
