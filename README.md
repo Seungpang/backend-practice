@@ -3,6 +3,7 @@
 
 
 ### Jenkins 서버 명령어
+```shell script
 $ sudo yum install wget
 $ sudo yum install maven
 $ sudo yum install git
@@ -12,13 +13,14 @@ $ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 $ sudo yum install jenkins
 $ sudo systemctl start jenkins
 $ sudo systemctl status jenkins
-
+```
 ### instance 서버 명령어
+```shell script
 $ vi authorized_keys
 $ chmod 700 ~/.ssh
 $ chmod 600 ~/.ssh/authorized_keys
 $ sudo chmod 666 /var/run/docker.sock
-
+```
 ### 방화벽 규칙 만들기
 
 ### 암호화

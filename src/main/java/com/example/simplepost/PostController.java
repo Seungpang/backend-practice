@@ -1,15 +1,21 @@
 package com.example.simplepost;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 public class PostController {
+
+    private static Integer PAGE_SIZE = 20;
 
     @Autowired
     PostRepository postRepository;
@@ -22,8 +28,10 @@ public class PostController {
 
     //글 목록을 조회
     @GetMapping("/posts")
-    public List<Post> getPostList() {
-        return postRepository.findAll();
+    public Page<Post> getPostList(@RequestParam(defaultValue = "1") Integer page) {
+        return postRepository.findAll(
+            PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id").descending())
+        );
     }
 
     //글 목록을 페이징하여 반환
