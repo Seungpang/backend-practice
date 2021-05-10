@@ -1,5 +1,7 @@
 package com.example.simplepost;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +23,18 @@ public class PostController {
     @Autowired
     PostRepository postRepository;
 
+    @Autowired
+    Producer producer;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     //글 작성
     @PostMapping("post")
-    public Post createPost(@RequestBody Post post) {
-        return postRepository.save(post);
+    public Post createPost(@RequestBody Post post) throws JsonProcessingException {
+        String jsonPost = objectMapper.writeValueAsString(post);
+        producer.sendTo(jsonPost);
+        return post;
     }
 
     //글 목록을 페이징하여 반환
@@ -40,7 +50,7 @@ public class PostController {
     public Post getPostById(@PathVariable("id") Long id) {
         return postRepository.findById(id).get();
     }
-    
+
     //글 내용으로 검색
     @GetMapping("/search")
     public List<Post> findPostsByContent(@RequestParam String content) {
