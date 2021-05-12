@@ -63,3 +63,49 @@ sudo tail -f /var/log/nginx/error.log
 
 # 에러를 해결할 수 있는 명령어
 sudo setsebool -P httpd_can_network_connect on
+
+
+# elasticsearch 설정한 것
+
+```shell script
+docker network create somenetwork
+docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 \
+-e "discovery.seed_hosts=10.146.0.10,10.146.0.11,10.146.0.13" \
+-e "node.name=es01" \
+-e "cluster.initial_master_nodes=es01,es02,es03,es04" \
+-e "network.publish_host=10.146.0.14" \
+elasticsearch:7.10.1
+```
+
+```shell script
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 \
+-e "discovery.seed_hosts=10.146.0.14,10.146.0.11,10.146.0.13" \
+-e "node.name=es02" \
+-e "cluster.initial_master_nodes=es01,es02,es03,es04" \
+-e "network.publish_host=10.146.0.10" \
+elasticsearch:7.10.1
+```
+
+```shell script
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 \
+-e "discovery.seed_hosts=10.146.0.14,10.146.0.10,10.146.0.13" \
+-e "node.name=es03" \
+-e "cluster.initial_master_nodes=es01,es02,es03,es04" \
+-e "network.publish_host=10.146.0.11" \
+elasticsearch:7.10.1
+```
+
+```shell script
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 \
+-e "discovery.seed_hosts=10.146.0.14,10.146.0.10,10.146.0.11" \
+-e "node.name=es04" \
+-e "cluster.initial_master_nodes=es01,es02,es03,es04" \
+-e "network.publish_host=10.146.0.13" \
+elasticsearch:7.10.1
+```
+
+
+
+
+
+
