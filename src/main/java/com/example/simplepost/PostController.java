@@ -36,8 +36,8 @@ public class PostController {
     //글 작성
     @PostMapping("post")
     public Post createPost(@RequestBody Post post) throws JsonProcessingException {
-        //String jsonPost = objectMapper.writeValueAsString(post);
-        //producer.sendTo(jsonPost);
+        String jsonPost = objectMapper.writeValueAsString(post);
+        producer.sendTo(jsonPost);
         return post;
     }
 
