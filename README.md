@@ -33,13 +33,20 @@ $ sudo chmod 666 /var/run/docker.sock
 
 ### nginx로 로드밸런싱 하기
 # Nginx 인스턴스에서 다음 명령어로 세팅
+```shell script
 sudo yum install nginx
 sudo systemctl start nginx
+```
+
+
 
 # 로드밸런싱 설정
+```shell script
 sudo vi /etc/nginx/nginx.conf
-# 위 명령어를 입력하여 nginx 설정 파일로 진입 후 다음과 같이 내용을 변경
+```
 
+# 위 명령어를 입력하여 nginx 설정 파일로 진입 후 다음과 같이 내용을 변경
+```shell script
 upstream cpu-bound-app {
   server {instance_1번의_ip}:8080 weight=100 max_fails=3 fail_timeout=3s;
   server {instance_2번의_ip}:8080 weight=100 max_fails=3 fail_timeout=3s;
@@ -53,16 +60,27 @@ location / {
   proxy_set_header Connection 'upgrade';
   proxy_set_header Host $host;
   proxy_cache_bypass $http_upgrade;
+
+```
 }
 
 # 위 설정이 완료되었으면 Nginx를 reload 시켜야함.
+```shell script
 sudo systemctl reload nginx
+```
+
 
 # Nginx의 에러로그를 확인하기 위한 명령어
+```shell script
 sudo tail -f /var/log/nginx/error.log
+```
+
 
 # 에러를 해결할 수 있는 명령어
+```shell script
 sudo setsebool -P httpd_can_network_connect on
+```
+
 
 
 # elasticsearch 설정한 것
